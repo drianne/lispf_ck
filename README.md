@@ -1,4 +1,4 @@
-<h1>brainfuckCompiler</h4> <br>
+<h1>Lispf_ck</h4> <br>
 <p align="center">    
     <img src="http://i66.tinypic.com/72zho7.jpg" width=130 height=130>
 </p>
@@ -16,17 +16,18 @@ Este repositório apresenta um lexer e parser de Lispf_ck, escritos em linguagem
 
 ## Sobre a Linguagem
 
-Lisp é uma linguagem de programação que foi projetada a fim de realizar processamento de dados simbólicos, sendo considerada uma linguagem formal matemática. Ela e uma linguagem funcional que representa o código como lista, de maneira que os elementos são separados por espaços atraves de uma notaç~ao prefixa, em que o primeiro elemento representa uma funç~ao e os demais s~ao argumentos da mesma. Essa linguagem foi utilizada por um tempo pela comunidade de inteligência artificial. Entretanto, nesse repositório será desenvolvido um parser para a linguagem Lispf_ck, uma variante da linguagem brainf_ck que combina a semântica do brainf_ck com outros recursos.
+Lisp é uma linguagem de programação formal, matemática, que foi projetada a fim de realizar processamento de dados simbólicos. A representação do código se dá como lista, de maneira que os elementos são separados por espaços através de uma notação prefixa, em que o primeiro elemento representa uma função e os demais são argumentos da mesma. Essa linguagem foi utilizada por um tempo pela comunidade de inteligência artificial. Entretanto, nesse repositório será desenvolvido um parser para a linguagem Lispf_ck, uma variante da linguagem brainf_ck que combina a semântica do brainfuck com outros recursos.
 
-De maneira simplista, a Lispf_ck e uma brainf_ck em termos de limitaç~oes, mas em uma notaç~ao diferente. Ex:
+De maneira simplista, a Lispf_ck é o mesmo que a brainf_ck em termos de limitações, mas em uma notação diferente. Ex:
 
 BrainFuck : ,+[.-]
+
 Lispf_ck: (do read inc (loop print dec))
 
 
 ### Caracteres
 
-Como ´e uma linguagem diretamente relacionada com brainf_ck, podemos utilizar o alfabeto de brainfuck para demonstrar o de Lispf_ck. Tal que, temos em brainf_ck:
+Como ´é uma linguagem diretamente relacionada com brainf_ck, podemos utilizar o alfabeto de brainfuck para demonstrar o de Lispf_ck. Tal que, temos em brainf_ck:
 
 | Caractere | Significado  |
 |---|---|
@@ -41,7 +42,7 @@ Como ´e uma linguagem diretamente relacionada com brainf_ck, podemos utilizar o
 
 E em Lispf_ck teriamos: 
 
-| Caractere | Significado  |
+| brainfuck | Lispfuck  |
 |---|---|
 | [...] | (loop ...)  |
 | > | right |
