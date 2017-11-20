@@ -10,7 +10,8 @@ Token = namedtuple(
 regex_map = [
     ('LPAR', r'\('),
     ('RPAR', r'\)'),
-    ('OP', r'inc|dec|print|read|loop|right|left|'),
+    ('NUMBER', r'[0-9]+(\.[0-9]*)?'),
+    ('OP', r'inc|dec|print|read|loop|right|left|add|def'),
     ('SPACE', r'\s+'),
 ]
 
