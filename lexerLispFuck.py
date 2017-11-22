@@ -1,51 +1,52 @@
+import ox
 import click
-import re
-from collections import namedtuple
 
 @click.command()
-@click.argument('lispf_ck',type=click.File('r'))
+@click.argument('source', type=click.File('r'))
 
-# O comando click usado pra obter argumentos na linha de comando
+def make_tree(source):
+    program = source.read()
 
-def tokenize(lispf_ck):
-    source = lispf_ck.read()
-    print(list(lexer(source)))
-
-def lexer(source):
-    Token = namedtuple(
-    'Token', 
-    ['type', 'data', 'lineno']
-    )
-
-    regex_map = [
-    ('LPAR', r'\('),
-    ('RPAR', r'\)'),
-    ('NUMBER', r'[0-9]+(\.[0-9]*)?'),
-    ('OP', r'inc|dec|print|read|loop|right|left|add|def'),
-    ('SPACE', r'\s+'),
+    lexer_rules = [
+        ('NAME', r'[a-zA-Z]+'),
+        ('NUMBER', r'\d+'),
+        ('RIGHT', r'right'),
+        ('LEFT', r'left'),
+        ('OPEN_PAREN', r'\('),
+        ('CLOSE_PAREN', r'\)'),
+        ('INCR', r'incr'),
+        ('COMMA', r'\,'),
+        ('SPACE', r'\s+'),
+        ('NEWLINE', r'\n'),
+        ('DEF', r'def'),
+        ('DO',r'do'),
+        ('SEMICOLON',r';')
     ]
 
-    template = r'(?P<{name}>{regex})'
-    REGEX_ALL = '|'.join(
-    template.format(name=name, regex=regex)
-    for (name, regex) in regex_map
-    )
-    re_all = re.compile(REGEX_ALL)
-
-    lineno = 1
-    for m in re_all.finditer(source):
-        type_ = m.lastgroup
-        if type_ == 'SPACE':
-            continue
-        elif type_ == 'NEWLINE':
-            lineno += 1
-            continue 
-        i, j = m.span()
-        data = m.string[i:j]
-        
-        yield Token(type_, data, lineno)
-
-
-if __name__ == "__main__":
-    tokenize()
+    lexer = ox.make_lexer(lexer_rules)
     
+    tokens = lexer(program)
+
+    operator = lambda type_op: type_op
+
+    op = lambda op: op
+    opr = lambda op, num: (op, num)
+
+    parser_rules = [
+        ('program : OPEN_PAREN expr CLOSE_PAREN', lambda x,y,z: y),
+        ('program : OPEN_PAREN CLOSE_PAREN', lambda x,y: '()'),
+        ('expr : operator expr', lambda x,y: (x,) + y),
+        ('expr : operator', lambda x: (x,)),
+        ('operator : program', op),
+        ('operator : DO', operator),
+        ('operator : RIGHT', operator),
+        ('operator : LEFT', operator),
+        ('operator : INC', operator),
+        ('operator : PRINT', operator),
+        ('operator : ADD', operator),
+        ('operator : NUMBER', operator),
+    ]
+
+    
+if __name__ == '__main__':
+    make_tree()
