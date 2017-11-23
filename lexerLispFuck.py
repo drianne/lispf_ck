@@ -7,23 +7,26 @@ import click
 def make_tree(source):
     program = source.read()
 
-    lexer_rules = [
-        ('NAME', r'[a-zA-Z]+'),
-        ('NUMBER', r'\d+'),
+    lexer = ox.make_lexer([
         ('RIGHT', r'right'),
         ('LEFT', r'left'),
-        ('OPEN_PAREN', r'\('),
-        ('CLOSE_PAREN', r'\)'),
-        ('INCR', r'incr'),
-        ('COMMA', r'\,'),
-        ('SPACE', r'\s+'),
-        ('NEWLINE', r'\n'),
-        ('DEF', r'def'),
+        ('INC', r'inc'),
+        ('DEC', r'dec'),
+        ('PRINT', r'print'),
+        ('READ', r'read'),
         ('DO',r'do'),
-        ('SEMICOLON',r';')
-    ]
-
-    lexer = ox.make_lexer(lexer_rules)
+        ('ADD',r'add'),
+        ('SUB',r'sub'),
+        ('LOOP', r'loop'),
+        ('DEF', r'def'),
+        ('NUMBER', r'\d+'),
+        ('PARENTESE_A', r'\('),
+        ('PARENTESE_F', r'\)'),
+        ('NAME', r'[-a-zA-Z]+'),
+        ('COMMENT', r';.*'),
+        ('NEWLINE', r'\n'),
+        ('SPACE', r'\s+')
+    ])
     
     tokens = lexer(program)
 
@@ -32,20 +35,28 @@ def make_tree(source):
     op = lambda op: op
     opr = lambda op, num: (op, num)
 
-    parser_rules = [
-        ('program : OPEN_PAREN expr CLOSE_PAREN', lambda x,y,z: y),
-        ('program : OPEN_PAREN CLOSE_PAREN', lambda x,y: '()'),
+    parser = ox.make_parser([
+        ('program : PARENTESE_A expr PARENTESE_F', lambda x,y,z: y),
+        ('program : PARENTESE_A PARENTESE_F', lambda x,y: '()'),
         ('expr : operator expr', lambda x,y: (x,) + y),
         ('expr : operator', lambda x: (x,)),
         ('operator : program', op),
+        ('operator : LOOP', operator),
         ('operator : DO', operator),
         ('operator : RIGHT', operator),
         ('operator : LEFT', operator),
+        ('operator : READ', operator),
         ('operator : INC', operator),
+        ('operator : DEC', operator),
+        ('operator : DEF', operator),
         ('operator : PRINT', operator),
         ('operator : ADD', operator),
+        ('operator : SUB', operator),
+        ('operator : NAME', operator),
         ('operator : NUMBER', operator),
-    ]
+    ], tokens)
+
+    tree = parser(tokens)
 
     
 if __name__ == '__main__':
