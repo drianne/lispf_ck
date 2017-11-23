@@ -4,8 +4,7 @@ import click
 @click.command()
 @click.argument('source', type=click.File('r'))
 
-def make_tree(source):
-    program = source.read()
+def make_tree(source):    
 
     lexer = ox.make_lexer([
         ('RIGHT', r'right'),
@@ -27,8 +26,11 @@ def make_tree(source):
         ('NEWLINE', r'\n'),
         ('SPACE', r'\s+')
     ])
+
+    tokens = ['RIGHT', 'LEFT', 'INC', 'DEC', 'SUB', 'ADD', 'NUMBER','PRINT', 'LOOP',
+                'READ','DEF','PARENTESE_F','PARENTESE_A','DO','NAME']
     
-    tokens = lexer(program)
+    program = source.read()
 
     operator = lambda type_op: type_op
 
